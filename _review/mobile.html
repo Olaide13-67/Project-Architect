@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mobile QA</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #182020; overflow: hidden; }
+  .phone {
+    position: absolute; left: 14px; top: 4px;
+    width: 390px; height: 844px; border: 0;
+    transform: scale(0.685); transform-origin: top left;
+    background: #f2ede2;
+  }
+  .note {
+    position: absolute; right: 28px; top: 24px; width: 210px;
+    font: 11px/1.6 ui-monospace, monospace; letter-spacing: .08em;
+    color: rgba(242,237,226,.55);
+  }
+</style>
+</head>
+<body>
+  <iframe class="phone" id="phone" src="/"></iframe>
+  <p class="note">390 × 844 CSS viewport<br />scaled 68.5% for QA</p>
+</body>
+</html>

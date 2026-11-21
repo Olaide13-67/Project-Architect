@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#b9cfd2" />
+<script>
+  // Must run before the browser restores a previous scroll position on reload.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+</script>
+<title>THE ARCHITECT — Meridian House</title>
+<meta name="description" content="A three-storey modernist residence, assembled before you. Scroll to build, then explore exterior, cutaway and interior views." />
+<link rel="preload" href="assets/fonts/cormorant-garamond-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="assets/fonts/inter-400-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="css/fonts.css" />
+<link rel="stylesheet" href="css/experience.css" />
+</head>
+<body class="is-building" data-mode="exterior">
+<a class="skip-link" href="#build">Skip to experience</a>
+
+  <div class="sky" aria-hidden="true"></div>
+  <div class="sun" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <canvas id="stage" aria-label="Interactive three-dimensional model of Meridian House"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <div class="loader" id="loader" aria-hidden="true">
+    <span class="loader__mark">THE ARCHITECT</span>
+    <span class="loader__line"><i></i></span>
+  </div>
+
+  <header class="bar">
+    <a class="mark" href="#" aria-label="The Architect — return to start">
+      <span class="mark__name">THE ARCHITECT</span>
+      <span class="mark__rule" aria-hidden="true"></span>
+      <span class="mark__sub">ATELIER</span>
+    </a>
+    <div class="bar__meta">
+      <span>MERIDIAN HOUSE</span>
+      <span class="bar__dot" aria-hidden="true"></span>
+      <span>MMXXVI</span>
+      <span class="bar__status" id="status">ASSEMBLY</span>
+    </div>
+  </header>
+
+  <section class="intro" id="intro" aria-label="Introduction">
+    <p class="intro__eyebrow">A THREE-STOREY RESIDENCE</p>
+    <h1 class="intro__title">THE <em>ARCHITECT</em></h1>
+    <p class="intro__sub">Concrete, stone and glass — assembled in full view.</p>
+  </section>
+
+  <div class="cue" id="cue" aria-hidden="true">
+    <span class="cue__line"></span>
+    <span class="cue__text">SCROLL TO BUILD</span>
+  </div>
+
+  <div class="enter-cue" id="enterCue" aria-hidden="true">
+    <span class="enter-cue__text">CONTINUE TO ENTER</span>
+    <span class="enter-cue__line"></span>
+  </div>
+
+  <section class="build" id="build" aria-label="Scroll-driven construction">
+    <div class="hud" id="buildHud" aria-hidden="true">
+      <div class="hud__stage">
+        <span class="hud__num" id="stageNum">01</span>
+        <span class="hud__name" id="stageName">SITE</span>
+      </div>
+      <div class="hud__ticks" id="ticks">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="hud__pct"><span id="buildPercent">00</span><small>%</small></div>
+      <div class="hud__bar"><i id="buildBar"></i></div>
+    </div>
+  </section>
+
+  <section class="reveal" id="reveal" aria-label="Completed residence"></section>
+
+  <section class="tour" id="tour" aria-label="Interior walkthrough">
+    <div class="tourHud" id="tourHud" aria-hidden="true">
+      <p class="tourHud__floor"><span id="tourCount">01</span><span class="tourHud__sep">/</span><span id="tourFloor">GROUND FLOOR</span></p>
+      <p class="tourHud__room" id="tourRoom">Living Room</p>
+      <p class="tourHud__meta" id="tourMeta">GARDEN ASPECT</p>
+    </div>
+  </section>
+
+  <div class="viewer" id="viewer" aria-label="Building viewer controls">
+
+    <div class="modes" role="tablist" aria-label="Viewing mode">
+      <button class="mode is-on" data-mode="exterior" role="tab" aria-selected="true" aria-controls="viewPanel" tabindex="0"><span>01</span>EXTERIOR</button>
+      <button class="mode" data-mode="cutaway" role="tab" aria-selected="false" aria-controls="viewPanel" tabindex="-1"><span>02</span>CUTAWAY</button>
+      <button class="mode" data-mode="interior" role="tab" aria-selected="false" aria-controls="viewPanel" tabindex="-1"><span>03</span>INTERIOR</button>
+    </div>
+
+    <div class="panel" id="viewPanel">
+      <div class="panel__group" data-panel="exterior">
+        <span class="panel__label">VIEWPOINT</span>
+        <div class="seg" role="group" aria-label="Camera viewpoint">
+          <button data-preset="front">FRONT</button>
+          <button data-preset="threequarter" class="is-on">3/4</button>
+          <button data-preset="side">SIDE</button>
+          <button data-preset="elevated">ELEVATED</button>
+        </div>
+      </div>
+
+      <div class="panel__group" data-panel="cutaway">
+        <span class="panel__label">FLOOR VISIBILITY</span>
+        <div class="seg" role="group" aria-label="Floor visibility">
+          <button data-level="0" class="is-on">01</button>
+          <button data-level="1" class="is-on">02</button>
+          <button data-level="2" class="is-on">03</button>
+          <button data-level="all" class="is-on">ALL</button>
+        </div>
+        <span class="panel__note">Façade removed to reveal the three-level structure.</span>
+      </div>
+
+      <div class="panel__group" data-panel="interior">
+        <span class="panel__label">INTERIOR</span>
+        <button class="enter-rooms" id="enterRooms">OPEN ROOM VIEWS <span aria-hidden="true">↗</span></button>
+      </div>
+    </div>
+
+    <div class="zoomer" id="zoomer">
+      <button id="zoomOut" aria-label="Zoom out">−</button>
+      <button id="zoomIn" aria-label="Zoom in">+</button>
+      <button id="zoomReset" class="zoomer__reset" aria-label="Reset view">RESET</button>
+    </div>
+
+    <p class="hint" id="hint">DRAG TO ORBIT <span>·</span> PINCH OR ± TO ZOOM</p>
+    <div class="viewer__foot">
+      <p class="viewer__label" id="viewLabel">EXTERIOR — THREE-QUARTER</p>
+      <button class="replay" id="replay">REPLAY BUILD <span aria-hidden="true">↺</span></button>
+    </div>
+  </div>
+
+  <div class="interior" id="interior" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Interior views">
+    <div class="interior__wrap">
+      <header class="interior__head">
+        <div class="interior__title">
+          <p class="kicker">INTERIORS <span>/</span> <span id="interiorFloorLabel">GROUND FLOOR</span></p>
+          <h2 id="roomTitle">Living Room</h2>
+        </div>
+        <button class="interior__close" id="interiorClose">CLOSE <span aria-hidden="true">×</span></button>
+      </header>
+
+      <div class="interior__body">
+        <aside class="interior__nav">
+          <div class="floors" id="interiorFloors" role="tablist" aria-label="Floor">
+            <button data-floor="0" class="is-on" role="tab" aria-selected="true"><i>01</i>GROUND</button>
+            <button data-floor="1" role="tab" aria-selected="false"><i>02</i>FIRST</button>
+            <button data-floor="2" role="tab" aria-selected="false"><i>03</i>SECOND</button>
+          </div>
+          <div class="rooms" id="interiorRooms"></div>
+          <p class="interior__note">Nine rooms across three levels.</p>
+        </aside>
+
+        <figure class="interior__figure">
+          <div class="interior__scene" id="roomScene" role="tabpanel" aria-live="polite"></div>
+          <figcaption class="interior__cap">
+            <span id="roomIndex">01 / 09</span>
+            <span id="roomMeta">GROUND FLOOR</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+
+  <section class="contact" id="contact" aria-label="Contact the atelier">
+    <div class="contact__inner">
+      <div class="contact__top">
+        <div class="contact__head">
+          <p class="contact__eyebrow"><span>ENQUIRIES</span><i aria-hidden="true"></i><span>MERIDIAN HOUSE</span></p>
+          <h2 class="contact__title">HAVE A<br><em>PROJECT</em><br>IN MIND?</h2>
+        </div>
+        <div class="contact__body">
+          <p class="contact__copy">Interested in creating an architectural experience or something similar for your business? Let's talk about your next project.</p>
+          <div class="contact__actions">
+            <a class="contact__btn contact__btn--primary" id="contactUs" href="#contact">CONTACT US <span aria-hidden="true">↗</span></a>
+            <a class="contact__btn contact__btn--ghost" id="contactSchedule" href="#contact">SCHEDULE A CONSULTATION <span aria-hidden="true">↗</span></a>
+            <a class="contact__btn contact__btn--ghost" id="contactEmail" href="mailto:olaide.frontend@gmail.com">EMAIL OA DEV <span aria-hidden="true">↗</span></a>
+            <a class="contact__btn contact__btn--ghost" id="contactPortfolio" href="https://olaidedev.netlify.app" target="_blank" rel="noopener noreferrer">VIEW PORTFOLIO <span aria-hidden="true">↗</span></a>
+          </div>
+          <p class="contact__note" id="contactNote" role="status"></p>
+        </div>
+      </div>
+
+      <footer class="contact__footer">
+        <div class="credit">
+          <p class="credit__lead">Want something similar for your business?</p>
+          <p class="credit__line">Chat with the developer — <a class="credit__brand" id="devLink" href="#contact">OA Dev</a></p>
+        </div>
+        <div class="contact__meta">
+          <span>THE ARCHITECT <span aria-hidden="true">·</span> ATELIER</span>
+          <span>MMXXVI</span>
+        </div>
+      </footer>
+    </div>
+  </section>
+
+  <script src="js/vendor/gsap.min.js"></script>
+  <script src="js/vendor/ScrollTrigger.min.js"></script>
+  <script src="js/vendor/three.min.js"></script>
+  <script src="js/villa.js"></script>
+  <script src="js/interiors.js"></script>
+  <script src="js/experience.js"></script>
+</body>
+</html>
